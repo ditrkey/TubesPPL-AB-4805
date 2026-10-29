@@ -43,7 +43,7 @@ Repo Pengerjaan Tubes PPL Kelompok AB SI4805
         <sub><b>Feyruz Challisa Putri Fatimah</b></sub>
         <sub><b>102022400264</b></sub>
       </a><br />
-      <small>QA & Docs</small>
+      <small>Fullstack Dev</small>
     </td>
   </tr>
 </table>
