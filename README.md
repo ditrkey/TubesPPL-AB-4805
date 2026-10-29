@@ -8,35 +8,40 @@ Repo Pengerjaan Tubes PPL Kelompok AB SI4805
     <td align="center" width="20%">
       <a href="https://github.com/username1">
         <img src="https://github.com/username1.png" width="80px;" alt=""/><br />
-        <sub><b>Nama Anggota 1</b></sub>
+        <sub><b>Aditya Rizky Syahputra</b></sub>
+        <sub><b>(1202220008)</b></sub>
       </a><br />
-      <small>PM / Scrum Master</small>
+      <small>PM / Fullstack Dev</small>
     </td>
     <td align="center" width="20%">
-      <a href="https://github.com/username2">
-        <img src="https://github.com/username2.png" width="80px;" alt=""/><br />
-        <sub><b>Nama Anggota 2</b></sub>
+      <a href="https://github.com/hannafr20">
+        <img src="https://github.com/hannafr20.png" width="80px;" alt=""/><br />
+        <sub><b>Hanna Raisa Farrasti</b></sub>
+        <sub><b>102022400091</b></sub>
       </a><br />
-      <small>Frontend Dev</small>
+      <small>Fullstack Dev</small>
     </td>
     <td align="center" width="20%">
-      <a href="https://github.com/username3">
-        <img src="https://github.com/username3.png" width="80px;" alt=""/><br />
-        <sub><b>Nama Anggota 3</b></sub>
+      <a href="https://github.com/NizamSMP">
+        <img src="https://github.com/NizamSMP.png" width="80px;" alt=""/><br />
+        <sub><b>Muhammad Nizam Abiyyu Wardhana</b></sub>
+        <sub><b>102022400244</b></sub>
       </a><br />
-      <small>Backend Dev</small>
+      <small>Fullstack Dev</small>
     </td>
     <td align="center" width="20%">
-      <a href="https://github.com/username4">
-        <img src="https://github.com/username4.png" width="80px;" alt=""/><br />
-        <sub><b>Nama Anggota 4</b></sub>
+      <a href="https://github.com/hyqqq-04">
+        <img src="https://github.com/hyqqq-04.png" width="80px;" alt=""/><br />
+        <sub><b>Yency Wiradjaja</b></sub>
+        <sub><b>102022400139</b></sub>
       </a><br />
-      <small>UI/UX Designer</small>
+      <small>Fullstack Dev</small>
     </td>
     <td align="center" width="20%">
-      <a href="https://github.com/username5">
-        <img src="https://github.com/username5.png" width="80px;" alt=""/><br />
-        <sub><b>Nama Anggota 5</b></sub>
+      <a href="https://github.com/feyruzchl">
+        <img src="https://github.com/feyruzchl.png" width="80px;" alt=""/><br />
+        <sub><b>Feyruz Challisa Putri Fatimah</b></sub>
+        <sub><b>102022400264</b></sub>
       </a><br />
       <small>QA & Docs</small>
     </td>
