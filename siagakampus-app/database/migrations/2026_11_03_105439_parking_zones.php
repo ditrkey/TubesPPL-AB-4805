@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parking_zones', function (Blueprint $table) {
+    Schema::create('parking_zones', function (Blueprint $table) {
         $table->id();
         $table->string('name');
         $table->string('status_condition'); // aman, siaga, tergenang
         $table->integer('capacity');
-        $table->polygon('boundary'); // Spatial type
+        $table->geometry('boundary'); // Spatial type
         $table->timestamps();
         $table->softDeletes();
     });

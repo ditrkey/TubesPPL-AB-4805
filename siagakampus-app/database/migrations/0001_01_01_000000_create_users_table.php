@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('title');
-            $table->text('description');
-            $table->string('photo_path');
-            $table->point('location'); // Tipe data spasial Point sesuai ERD
-            $table->enum('status', ['pending', 'verified', 'resolved', 'rejected']);
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->string('phone');
+            $table->enum('role', ['Warga Tel-U', 'Admin', 'Superadmin']);
             $table->timestamps();
             $table->softDeletes();
         });
