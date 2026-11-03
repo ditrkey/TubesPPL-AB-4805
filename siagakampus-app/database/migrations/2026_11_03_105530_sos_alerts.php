@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('sos_alerts', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained('users');
-        $table->point('location'); // Spatial type
+        $table->geometry('location'); // Spatial type
         $table->enum('status', ['active', 'dispatched', 'handled']);
         $table->timestamps(); 
     });

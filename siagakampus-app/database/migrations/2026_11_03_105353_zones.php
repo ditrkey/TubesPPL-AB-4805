@@ -16,7 +16,7 @@ return new class extends Migration
         $table->string('name');
         $table->text('description');
         $table->enum('risk_level', ['rendah', 'sedang', 'tinggi']);
-        $table->polygon('boundary'); // Spatial type
+        $table->geometry('boundary'); // Spatial type
         $table->timestamps();
         $table->softDeletes();
     });
