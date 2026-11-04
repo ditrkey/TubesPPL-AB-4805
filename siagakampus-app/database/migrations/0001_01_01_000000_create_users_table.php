@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('phone');
-            $table->enum('role', ['Warga Tel-U', 'Admin', 'Superadmin']);
+            $table->enum('role', ['Warga Tel-U', 'Admin', 'Superadmin'])->default('Admin');
             $table->timestamps();
             $table->softDeletes();
         });
