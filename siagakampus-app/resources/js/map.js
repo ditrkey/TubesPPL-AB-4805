@@ -3,6 +3,12 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { fromLonLat, transformExtent } from 'ol/proj';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { Style, Icon } from 'ol/style';
+import Overlay from 'ol/Overlay';
 import 'ol/ol.css';
 import 'flowbite';
 
@@ -16,10 +22,11 @@ import { Style, Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 document.addEventListener('DOMContentLoaded', () => {
     const mapElement = document.getElementById('map');
     if (!mapElement) return;
-    const rektoratCoords = [107.6306, -6.9740];
+
+    const rektoratCoords = [107.6306, -6.9740]; // [Lng, Lat] OpenLayers
 
     const campusExtent = transformExtent(
-        [107.623680,-6.980678,107.637885,-6.967664], // EPSG:4326 (WGS84)
+        [107.623680, -6.980678, 107.637885, -6.967664], // EPSG:4326 (WGS84)
         'EPSG:4326',
         'EPSG:3857' // Konversi ke proyeksi tampilan OpenLayers
     );
@@ -38,13 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
             userLocationLayer
         ],
-view: new View({
+        view: new View({
             center: fromLonLat(rektoratCoords),
             zoom: 16,
-            minZoom: 1,             // Cegah pengguna zoom-out terlalu jauh sampai luar Bandung
-            maxZoom: 19,             // Batas maksimal detail zoom-in
-            extent: campusExtent,    // Pengguna tidak bisa menggeser peta keluar dari kotak radius ini
-            constrainOnlyCenter: false, // Membuat geseran peta terasa mulus saat membentur batas extent
+            minZoom: 14,
+            maxZoom: 19,
+            extent: campusExtent,
+            constrainOnlyCenter: false,
             smoothExtentConstraint: false
         })
     });
