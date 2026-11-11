@@ -14,7 +14,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
-    <title>Inventaris Armada</title>
+    <title>Peta Interaktif</title>
 </head>
 <body class="flex min-h-screen">
     <aside class="flex min-h-screen flex-col justify-between border-e border-gray-100 bg-white w-64 flex-shrink:0">
