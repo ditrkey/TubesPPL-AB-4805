@@ -14,8 +14,11 @@ return new class extends Migration
     Schema::create('sos_alerts', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained('users');
-        $table->geometry('location'); // Spatial type
-        $table->enum('status', ['active', 'dispatched', 'handled']);
+        $table->geometry('location');
+        $table->spatialIndex('location');
+        $table->decimal('latitude');
+        $table->decimal('longtitude');
+        $table->enum('status', ['active', 'dispatched', 'handled','pending'])->default('pending');
         $table->timestamps(); 
     });
     }
