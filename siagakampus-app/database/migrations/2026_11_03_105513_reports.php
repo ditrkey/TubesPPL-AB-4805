@@ -6,32 +6,39 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('zone_id')->nullable()->constrained('zones')->nullOnDelete();
-            $table->string('title');
-            $table->string('category')->default('Banjir'); // 'Banjir', 'Drainase', 'Akses Tertutup', 'Lainnya'
-            $table->enum('water_level', ['Low', 'Med', 'High'])->default('Low'); // Low (<15 cm), Med (15-40 cm), High (>40 cm)
-            $table->text('description');
+
+            // Kolom dari main (PBI Pelaporan Warga) - dibuat nullable agar input manual Admin PBI-05 tidak error
+            $table->string('nama')->nullable();
+            $table->string('nim', 10)->nullable();
+            $table->string('jurusan')->nullable();
+            $table->string('lokasi')->nullable();
+            $table->string('location_type')->default('gedung');
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->text('pengaduan')->nullable();
+            $table->integer('water_depth_cm')->default(30);
+
+            // Kolom tambahan untuk PBI-05 (Manajemen & Verifikasi Laporan Admin)
+            $table->string('title')->nullable();
+            $table->string('category')->default('Banjir');
+            $table->enum('water_level', ['Low', 'Med', 'High'])->default('Low');
+            $table->text('description')->nullable();
             $table->string('photo_path');
-            $table->geometry('location', subtype: 'point', srid: 4326); // MySQL Spatial POINT (SRID 4326)
-            $table->spatialIndex('location');
+            $table->geometry('location', subtype: 'point', srid: 4326)->nullable();
             $table->enum('status', ['Pending', 'Verified', 'Handling', 'Resolved', 'Rejected'])->default('Pending');
             $table->text('rejection_reason')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('reports');
