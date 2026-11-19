@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('audit_logs', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->nullable()->constrained('users');
-        $table->string('action');
-        $table->string('ip_address');
-        $table->text('user_agent');
-        $table->timestamp('created_at')->useCurrent();
-    });
+        Schema::create('audit_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('action');
+            $table->string('ip_address', 45);
+            $table->text('user_agent');
+            $table->timestamp('created_at')->useCurrent();
+        });
     }
 
     /**
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('audit_logs');
     }
 };
