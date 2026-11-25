@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MapController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +37,19 @@ Route::middleware(['auth', 'role:admin|superadmin'])->prefix('admin')->name('adm
 
     // Resource CRUD Manajemen Laporan Masuk
     Route::resource('reports', ReportController::class);
+});
+
+// PBI 12: Inventaris Bencana & Sinkronisasi Titik Ikon "BACKPACK"
+Route::get('/api/inventories/points', [InventoryController::class, 'getMapPoints'])->name('inventories.points');
+
+Route::prefix('inventaris')->name('inventories.')->group(function () {
+    // Bisa dilihat Murid, Admin, dan Dosen
+    Route::get('/', [InventoryController::class, 'index'])->name('index');
+
+    // Form Pemakaian di lokasi (ambil atribut)
+    Route::post('/{inventory}/pakai', [InventoryController::class, 'storeUsage'])->name('usage.store');
+
+    // Khusus Admin / Dosen (pengecekan role juga dijaga di Controller / Middleware)
+    Route::post('/', [InventoryController::class, 'store'])->name('store');
+    Route::patch('/items/{item}', [InventoryController::class, 'updateStock'])->name('items.update');
 });
