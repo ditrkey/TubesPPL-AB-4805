@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admintemp')
 
 @section('title', 'Verifikasi Laporan Masuk (PBI-05)')
 @section('page_category', 'Verifikasi & Laporan')
