@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Document')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    @stack('styles')
 </head>
 <body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased">
     <div
         x-data="{
             open: false,
-            sections: { collections: true, recent: false, team: false },
+            sections: {
+                managements: {{ request()->routeIs('admin.reports.*', 'inventories.*') ? 'true' : 'true' }},
+                weather: {{ request()->routeIs('map') ? 'true' : 'false' }},
+                roles: false,
+            },
             search: '',
-            active: 'overview',
-            recent: [
-                { title: 'Getting Started Guide', type: 'guide', time: '2h ago' },
-                { title: 'API Documentation', type: 'doc', time: '1d ago' },
-                { title: 'User Onboarding Flow', type: 'article', time: '3d ago' },
-            ],
-            notifications: 5,
+            active: '{{ request()->routeIs('admin.reports.*') ? 'report' : (request()->routeIs('inventories.*') ? 'tools' : (request()->routeIs('map') ? 'map' : 'overview')) }}',
         }"
         @sidebar-toggle.window="open = !open"
         @keydown.escape.window="open = false"
@@ -32,7 +30,7 @@
                     <svg class="text-zinc-900 dark:text-white size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
-                    <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">Oxbow UI</span>
+                    <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">SiagaKampus</span>
                 </div>
 
                 <button
@@ -66,10 +64,23 @@
             :class="open ? 'translate-x-0' : ''"
         >
             <!-- Header -->
-            <div class="p-3 block shrink-0 items-center justify-between px-4 lg:px-5 border-b border-zinc-100 dark:border-zinc-800">
+            <div class="h-14 shrink-0 flex items-center justify-between px-4 lg:px-5 border-b border-zinc-100 dark:border-zinc-800">
                 <div class="flex items-center gap-2.5">
-                    <svg fill="none" height="36" viewBox="0 0 40 48" width="36" xmlns="http://www.w3.org/2000/svg"><g clip-rule="evenodd" fill-rule="evenodd"><path d="m4.29111 28.6025c.90712.9019.9071 2.3641-.00003 3.266l-.04646.0462c-.90713.9019-2.37788.9018-3.284994-.0001-.9071177-.9019-.9071038-2.3641.000031-3.266l.046453-.0462c.90714-.9019 2.37788-.9018 3.285.0001z" fill="#a5b4fc"/><path d="m15.2112 29.298c.9055.9035.9028 2.3658-.006 3.266l-6.43424 6.3741c-.90876.9002-2.3795.8976-3.28499-.0059-.90548-.9035-.90282-2.3658.00594-3.266l6.43429-6.3741c.9088-.9002 2.3795-.8976 3.285.0059z" fill="#6366f1"/><path d="m23.9431 40.2706c.7116-1.0613 2.1538-1.348 3.2212-.6405l.1394.0923c1.0674.7075 1.3558 2.1414.6442 3.2026-.7116 1.0613-2.1538 1.3481-3.2212.6406l-.1394-.0924c-1.0674-.7075-1.3558-2.1414-.6442-3.2026z" fill="#a5b4fc"/><path d="m39.2728 28.4638c.9072.9019.9072 2.3641 0 3.266l-3.159 3.1408c-.9072.9019-2.3779.9019-3.285 0s-.9071-2.3641 0-3.266l3.1591-3.1408c.9071-.9019 2.3778-.9019 3.2849 0z" fill="#6366f1"/><g fill="#4f46e5"><path d="m39.3197 16.8473c.9071.9019.9071 2.3642 0 3.266l-23.3446 23.2098c-.9071.9019-2.3779.9019-3.285 0s-.9071-2.3641 0-3.266l23.3446-23.2098c.9071-.9019 2.3778-.9019 3.285 0z"/><path d="m34.905 9.71133c.9072.90187.9072 2.36417 0 3.26607l-13.426 13.3485c-.9071.9019-2.3779.9019-3.285 0s-.9071-2.3642 0-3.2661l13.4261-13.34847c.9071-.90189 2.3778-.90189 3.2849 0z"/><path d="m27.8187 5.18362c.9077.90128.9087 2.36353.0022 3.26603l-17.2588 17.18215c-.90647.9025-2.37721.9035-3.28495.0022-.90773-.9013-.90872-2.3635-.00221-3.266l17.25876-17.18218c.9065-.9025 2.3772-.90348 3.285-.0022z"/></g><path d="m10.7276 10.6841c.9056.9035.9031 2.3657-.0056 3.266l-6.75949 6.6974c-.90869.9003-2.37943.8978-3.28499-.0056-.905563-.9035-.903032-2.3657.005654-3.2661l6.759476-6.6973c.90868-.90034 2.37942-.89783 3.28495.0056z" fill="#6366f1"/><path d="m14.8678 4.00024c1.2828 0 2.3228 1.03397 2.3228 2.30944v.23094c0 1.27546-1.04 2.30943-2.3228 2.30943-1.2829 0-2.3229-1.03397-2.3229-2.30943v-.23094c0-1.27547 1.04-2.30944 2.3229-2.30944z" fill="#a5b4fc"/>
-                    </g></svg>
+                    <svg fill="none" height="36" viewBox="0 0 40 48" width="36" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                        <g clip-rule="evenodd" fill-rule="evenodd">
+                            <path d="m4.29111 28.6025c.90712.9019.9071 2.3641-.00003 3.266l-.04646.0462c-.90713.9019-2.37788.9018-3.284994-.0001-.9071177-.9019-.9071038-2.3641.000031-3.266l.046453-.0462c.90714-.9019 2.37788-.9018 3.285.0001z" fill="#a5b4fc"/>
+                            <path d="m15.2112 29.298c.9055.9035.9028 2.3658-.006 3.266l-6.43424 6.3741c-.90876.9002-2.3795.8976-3.28499-.0059-.90548-.9035-.90282-2.3658.00594-3.266l6.43429-6.3741c.9088-.9002 2.3795-.8976 3.285.0059z" fill="#6366f1"/>
+                            <path d="m23.9431 40.2706c.7116-1.0613 2.1538-1.348 3.2212-.6405l.1394.0923c1.0674.7075 1.3558 2.1414.6442 3.2026-.7116 1.0613-2.1538 1.3481-3.2212.6406l-.1394-.0924c-1.0674-.7075-1.3558-2.1414-.6442-3.2026z" fill="#a5b4fc"/>
+                            <path d="m39.2728 28.4638c.9072.9019.9072 2.3641 0 3.266l-3.159 3.1408c-.9072.9019-2.3779.9019-3.285 0s-.9071-2.3641 0-3.266l3.1591-3.1408c.9071-.9019 2.3778-.9019 3.2849 0z" fill="#6366f1"/>
+                            <g fill="#4f46e5">
+                                <path d="m39.3197 16.8473c.9071.9019.9071 2.3642 0 3.266l-23.3446 23.2098c-.9071.9019-2.3779.9019-3.285 0s-.9071-2.3641 0-3.266l23.3446-23.2098c.9071-.9019 2.3778-.9019 3.285 0z"/>
+                                <path d="m34.905 9.71133c.9072.90187.9072 2.36417 0 3.26607l-13.426 13.3485c-.9071.9019-2.3779.9019-3.285 0s-.9071-2.3642 0-3.2661l13.4261-13.34847c.9071-.90189 2.3778-.90189 3.2849 0z"/>
+                                <path d="m27.8187 5.18362c.9077.90128.9087 2.36353.0022 3.26603l-17.2588 17.18215c-.90647.9025-2.37721.9035-3.28495.0022-.90773-.9013-.90872-2.3635-.00221-3.266l17.25876-17.18218c.9065-.9025 2.3772-.90348 3.285-.0022z"/>
+                            </g>
+                            <path d="m10.7276 10.6841c.9056.9035.9031 2.3657-.0056 3.266l-6.75949 6.6974c-.90869.9003-2.37943.8978-3.28499-.0056-.905563-.9035-.903032-2.3657.005654-3.2661l6.759476-6.6973c.90868-.90034 2.37942-.89783 3.28495.0056z" fill="#6366f1"/>
+                            <path d="m14.8678 4.00024c1.2828 0 2.3228 1.03397 2.3228 2.30944v.23094c0 1.27546-1.04 2.30943-2.3228 2.30943-1.2829 0-2.3229-1.03397-2.3229-2.30943v-.23094c0-1.27547 1.04-2.30944 2.3229-2.30944z" fill="#a5b4fc"/>
+                        </g>
+                    </svg>
                     <div>
                         <p class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-tight">SiagaKampus</p>
                     </div>
@@ -109,11 +120,11 @@
             <nav class="flex-1 px-2 lg:px-3 pb-6 overflow-y-auto">
                 <ul class="space-y-1">
                     <li>
-                        <button
-                            type="button"
+                        <a
+                            href="{{ url('/') }}"
+                            @click="active = 'overview'"
                             class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
                             :class="active === 'overview' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                            @click="active = 'overview'"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                 <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
@@ -121,7 +132,7 @@
                                 <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                             </svg>
                             <span>Dashboard</span>
-                        </button>
+                        </a>
                     </li>
 
                     <!-- Managements collapsible -->
@@ -129,8 +140,8 @@
                         <button
                             type="button"
                             class="w-full h-9 px-3 rounded-md flex items-center justify-between text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5"
-                            @click="sections.collections = !sections.collections"
-                            :aria-expanded="sections.collections"
+                            @click="sections.managements = !sections.managements"
+                            :aria-expanded="sections.managements"
                         >
                             <span class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
@@ -139,20 +150,20 @@
                                 </svg>
                                 <span>Managements</span>
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200 shrink-0" :class="sections.collections ? 'rotate-90' : ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200 shrink-0" :class="sections.managements ? 'rotate-90' : ''">
                                 <path d="M9 6l6 6l-6 6" />
                             </svg>
                         </button>
-                        <div x-show="sections.collections" x-cloak>
+
+                        <div x-show="sections.managements" x-cloak x-collapse>
                             <ul class="mt-1 pl-2 space-y-1">
                                 <li>
-                                  <button
-                                    type="button"
-                                    class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
-                                    :class="active === 'report' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                                    @click="active = 'report'"
-                                  >
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
+                                    <a
+                                        href="{{ route('admin.reports.index') }}"
+                                        @click="active = 'report'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'report' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
                                         <span class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -163,16 +174,14 @@
                                         </span>
                                         <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">18</span>
                                     </a>
-                                  </button>
                                 </li>
                                 <li>
-                                  <button
-                                    type="button"
-                                    class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
-                                    :class="active === 'floodzone' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                                    @click="active = 'floodzone'"
-                                  >
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
+                                    <a
+                                        href="#_"
+                                        @click="active = 'floodzone'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'floodzone' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
                                         <span class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -183,16 +192,14 @@
                                         </span>
                                         <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">64</span>
                                     </a>
-                                    </button>
                                 </li>
                                 <li>
-                                  <button
-                                    type="button"
-                                    class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
-                                    :class="active === 'parkzone' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                                    @click="active = 'parkzone'"
-                                  >
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
+                                    <a
+                                        href="#_"
+                                        @click="active = 'parkzone'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'parkzone' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
                                         <span class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -203,16 +210,14 @@
                                         </span>
                                         <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">64</span>
                                     </a>
-                                    </button>
                                 </li>
                                 <li>
-                                  <button
-                                    type="button"
-                                    class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
-                                    :class="active === 'evacuation' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                                    @click="active = 'evacuation'"
-                                  >
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
+                                    <a
+                                        href="#_"
+                                        @click="active = 'evacuation'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'evacuation' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
                                         <span class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -223,16 +228,14 @@
                                         </span>
                                         <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">64</span>
                                     </a>
-                                    </button>
                                 </li>
                                 <li>
-                                  <button
-                                    type="button"
-                                    class="w-full h-9 px-3 rounded-md flex items-center gap-2 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
-                                    :class="active === 'assignment' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
-                                    @click="active = 'assignment'"
-                                  >
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
+                                    <a
+                                        href="#_"
+                                        @click="active = 'assignment'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'assignment' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
                                         <span class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
                                                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -243,159 +246,107 @@
                                         </span>
                                         <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">7</span>
                                     </a>
-                                    </button>
+                                </li>
+                                <li>
+                                    <a
+                                        href="{{ route('inventories.index') }}"
+                                        @click="active = 'tools'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'tools' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
+                                        <span class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                <path d="M9 14v.01M12 14v.01M15 14v.01" />
+                                            </svg>
+                                            <span>SAR Tools</span>
+                                        </span>
+                                        <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">18</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
-                    <!-- Recent collapsible -->
+                    <!-- Weather collapsible -->
                     <li class="pt-2 mt-2 border-t border-zinc-100 dark:border-zinc-800">
                         <button
                             type="button"
                             class="w-full h-9 px-3 rounded-md flex items-center justify-between text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5"
-                            @click="sections.recent = !sections.recent"
-                            :aria-expanded="sections.recent"
+                            @click="sections.weather = !sections.weather"
+                            :aria-expanded="sections.weather"
                         >
                             <span class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                    <path d="M9 14v.01M12 14v.01M15 14v.01" />
+                                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                    <rect x="9" y="3" width="6" height="4" rx="2" />
                                 </svg>
-                                <span>Recent</span>
+                                <span>Weather</span>
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200 shrink-0" :class="sections.recent ? 'rotate-90' : ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200 shrink-0" :class="sections.weather ? 'rotate-90' : ''">
                                 <path d="M9 6l6 6l-6 6" />
                             </svg>
                         </button>
-                        <div x-show="sections.recent" x-cloak>
-                            <ul class="mt-1 pl-2 space-y-1">
-                                <template x-for="item in recent" :key="item.title">
-                                    <li>
-                                        <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                                            <span class="flex items-center gap-2 truncate">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                                    <path d="M9 14v.01M12 14v.01M15 14v.01" />
-                                                </svg>
-                                                <span class="truncate" x-text="item.title"></span>
-                                            </span>
-                                            <span class="text-[0.70rem] text-zinc-500 dark:text-zinc-400 shrink-0 ml-2" x-text="item.time"></span>
-                                        </a>
-                                    </li>
-                                </template>
-                            </ul>
-                        </div>
-                    </li>
 
-                    <!-- Team collapsible -->
-                    <li>
-                        <button
-                            type="button"
-                            class="w-full h-9 px-3 rounded-md flex items-center justify-between text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5"
-                            @click="sections.team = !sections.team"
-                            :aria-expanded="sections.team"
-                        >
-                            <span class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                    <circle cx="12" cy="13" r="2" />
-                                    <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
-                                    <circle cx="17" cy="5" r="2" />
-                                    <path d="M17 10h2a2 2 0 0 1 2 2v1" />
-                                    <circle cx="7" cy="5" r="2" />
-                                    <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
-                                </svg>
-                                <span>Team</span>
-                                <span
-                                    x-show="notifications > 0"
-                                    x-cloak
-                                    class="text-[0.70rem] px-1.5 py-0.5 rounded bg-rose-500 text-white"
-                                    x-text="notifications"
-                                ></span>
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200 shrink-0" :class="sections.team ? 'rotate-90' : ''">
-                                <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                        </button>
-                        <div x-show="sections.team" x-cloak>
+                        <div x-show="sections.weather" x-cloak x-collapse>
                             <ul class="mt-1 pl-2 space-y-1">
                                 <li>
-                                    <a href="#_" class="flex items-center justify-between h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                                        <span>Members</span>
-                                        <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">12</span>
+                                    <a
+                                        href="#_"
+                                        @click="active = 'weatherstat'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'weatherstat' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
+                                        <span class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                <path d="M9 14v.01M12 14v.01M15 14v.01" />
+                                            </svg>
+                                            <span>Statistics</span>
+                                        </span>
+                                        <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">18</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#_" class="flex items-center h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">Roles</a>
+                                    <a
+                                        href="#_"
+                                        @click="active = 'broadcast'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'broadcast' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
+                                        <span class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                <path d="M9 14v.01M12 14v.01M15 14v.01" />
+                                            </svg>
+                                            <span>Broadcast</span>
+                                        </span>
+                                        <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">64</span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#_" class="flex items-center h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">Permissions</a>
+                                    <a
+                                        href="{{ route('map') }}"
+                                        @click="active = 'map'"
+                                        class="flex items-center justify-between h-9 px-3 rounded-md text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        :class="active === 'map' ? 'bg-zinc-100 text-zinc-900 font-medium dark:bg-white/10 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'"
+                                    >
+                                        <span class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                <path d="M9 14v.01M12 14v.01M15 14v.01" />
+                                            </svg>
+                                            <span>Realtime Map</span>
+                                        </span>
+                                        <span class="text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">64</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
-                    </li>
-
-                    <li>
-                        <a href="#_" class="flex items-center gap-2 h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697" />
-                                <path d="M18 14v4h4M18 11v-4a2 2 0 0 0 -2 -2h-2" />
-                                <rect x="8" y="3" width="6" height="4" rx="2" />
-                                <circle cx="18" cy="18" r="4" />
-                                <path d="M8 11h4M8 15h3" />
-                            </svg>
-                            <span>Insights</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#_" class="flex items-center gap-2 h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                <rect x="4" y="4" width="6" height="6" rx="1" />
-                                <rect x="14" y="4" width="6" height="6" rx="1" />
-                                <rect x="4" y="14" width="6" height="6" rx="1" />
-                                <rect x="14" y="14" width="6" height="6" rx="1" />
-                            </svg>
-                            <span>Integrations</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#_" class="flex items-center gap-2 h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                                <rect x="9" y="3" width="6" height="4" rx="2" />
-                            </svg>
-                            <span>API</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#_" class="flex items-center gap-2 h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                <circle cx="12" cy="12" r="4" />
-                                <circle cx="12" cy="12" r="9" />
-                                <path d="M15 15l3.35 3.35M9 15l-3.35 3.35M5.65 5.65l3.35 3.35M18.35 5.65l-3.35 3.35" />
-                            </svg>
-                            <span>Help Center</span>
-                            <span class="ml-auto text-[0.70rem] px-1.5 py-0.5 rounded bg-white text-zinc-900 border border-zinc-200 dark:bg-white/10 dark:text-white dark:border-white/10">Online</span>
-                        </a>
-                    </li>
-
-                    <li class="pt-2 mt-2 border-t border-zinc-100 dark:border-zinc-800">
-                        <a href="#_" class="flex items-center gap-2 h-9 px-3 rounded-md text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0">
-                                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                                <path d="M11 13l9 -9M15 4h5v5" />
-                            </svg>
-                            <span>Open site</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3 ml-auto opacity-60 shrink-0">
-                                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                                <path d="M11 13l9 -9M15 4h5v5" />
-                            </svg>
-                        </a>
                     </li>
                 </ul>
             </nav>
@@ -435,8 +386,8 @@
                             <span class="flex items-center gap-3 min-w-0">
                                 <img src="https://i.pravatar.cc/40?img=12" alt="Avatar" class="size-8 rounded-full shrink-0" />
                                 <span class="text-left truncate">
-                                    <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">Alex W.</span>
-                                    <span class="block text-xs text-zinc-500 dark:text-zinc-400 truncate">alex@orbitkit.dev</span>
+                                    <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{{ auth()->user()->name ?? 'Alex W.' }}</span>
+                                    <span class="block text-xs text-zinc-500 dark:text-zinc-400 truncate">{{ auth()->user()->email ?? 'alex@orbitkit.dev' }}</span>
                                 </span>
                             </span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-zinc-600 dark:text-zinc-300 transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''">
@@ -476,12 +427,15 @@
                                 </a>
                             </div>
                             <div class="border-t border-zinc-100 dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-800/50">
-                                <button
-                                    type="button"
-                                    class="w-full h-8 px-3 flex items-center justify-center text-xs font-medium rounded-md text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                                >
-                                    Sign out
-                                </button>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="w-full h-8 px-3 flex items-center justify-center text-xs font-medium rounded-md text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+                                    >
+                                        Sign out
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -490,9 +444,11 @@
         </aside>
 
         <!-- Main content -->
-        <main class="flex-1 min-w-0 p-6">
+        <main class="flex-1 min-w-0 p-8 overflow-y-auto">
             @yield('content')
         </main>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

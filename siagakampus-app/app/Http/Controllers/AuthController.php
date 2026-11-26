@@ -38,14 +38,13 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // Catat login ke Audit Trail (KNF-06)
             AuditLog::record("Pengguna ({$user->name} - {$user->role}) berhasil masuk ke sesi sistem");
 
             if ($user->isAdmin()) {
-                return redirect()->intended(route('admin.reports.index'));
+                return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->intended('/');
+            return redirect()->intended('/login');
         }
 
         return back()->withErrors([

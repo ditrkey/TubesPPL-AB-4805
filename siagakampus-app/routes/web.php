@@ -4,19 +4,14 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MapController;
+use App\Models\Report;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - SiagaKampus
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', function () {
-    return redirect()->route('admin.reports.index');
+    return redirect()->route('admin.dashboard');
 });
 
-// Autentikasi Pengguna (UC-01 / Breeze Standard)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -24,32 +19,54 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Peta Spasial Publik (UC-15)
-Route::controller(MapController::class)->group(function () {
-    Route::get('/map', 'index')->name('map.index');
-    Route::get('/map/data', 'data')->name('map.data');
-});
+Route::middleware(['auth', 'role:admin|superadmin'])->group(function () {
+    Route::controller(MapController::class)->group(function () {
+        Route::get('/map', 'index')->name('map');
+        Route::get('/map/data', 'data')->name('map.data');
+    });
 
-// Modul Web Dashboard Pengelola (Admin & Superadmin) - KF-05 / UC-05
-Route::middleware(['auth', 'role:admin|superadmin'])->prefix('admin')->name('admin.')->group(function () {
-    // Alur Verifikasi Khusus Status Laporan Banjir (UC-05)
-    Route::patch('reports/{report}/status', [ReportController::class, 'updateStatus'])->name('reports.update-status');
+    // Inventaris (index, store, update stok, pemakaian, dan titik peta)
+    Route::get('/inventaris', [InventoryController::class, 'index'])->name('inventories.index');
+    Route::post('/inventaris', [InventoryController::class, 'store'])->name('inventories.store');
+    Route::patch('/inventaris/items/{item}', [InventoryController::class, 'updateStock'])->name('inventories.items.update');
+    Route::post('/inventaris/{inventory}/usage', [InventoryController::class, 'storeUsage'])->name('inventories.usage.store');
+    Route::get('/inventaris/map-points', [InventoryController::class, 'getMapPoints'])->name('inventories.map-points');
 
-    // Resource CRUD Manajemen Laporan Masuk
-    Route::resource('reports', ReportController::class);
-});
+    // Admin Dashboard & Reports
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', function (Request $request) {
+            $stats = [
+                'total' => Report::count(),
+                'pending' => Report::where('status', 'pending')->count(),
+                'processed' => Report::where('status', 'processed')->count(),
+                'resolved' => Report::where('status', 'resolved')->count(),
+            ];
 
-// PBI 12: Inventaris Bencana & Sinkronisasi Titik Ikon "BACKPACK"
-Route::get('/api/inventories/points', [InventoryController::class, 'getMapPoints'])->name('inventories.points');
+            $categories = collect();
 
-Route::prefix('inventaris')->name('inventories.')->group(function () {
-    // Bisa dilihat Murid, Admin, dan Dosen
-    Route::get('/', [InventoryController::class, 'index'])->name('index');
+            $reports = Report::query()
+                ->when($request->filled('status') && $request->status !== 'all', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                })
+                ->when($request->filled('search'), function ($q) use ($request) {
+                    $search = $request->search;
+                    $q->where(function ($sub) use ($search) {
+                        $sub->where('location', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    });
+                })
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
 
-    // Form Pemakaian di lokasi (ambil atribut)
-    Route::post('/{inventory}/pakai', [InventoryController::class, 'storeUsage'])->name('usage.store');
+            $filters = $request->only(['search', 'category', 'status']);
 
-    // Khusus Admin / Dosen (pengecekan role juga dijaga di Controller / Middleware)
-    Route::post('/', [InventoryController::class, 'store'])->name('store');
-    Route::patch('/items/{item}', [InventoryController::class, 'updateStock'])->name('items.update');
+            return view('admin.dashboard', compact('stats', 'categories', 'reports', 'filters'));
+        })->name('dashboard');
+
+        Route::patch('reports/{report}/status', [ReportController::class, 'updateStatus'])
+            ->name('reports.update-status');
+
+        Route::resource('reports', ReportController::class);
+    });
 });
