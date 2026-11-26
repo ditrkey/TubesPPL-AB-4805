@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\Models\InventoryItem;
 use App\Models\InventoryUsage;
@@ -213,8 +213,9 @@ class InventoryController extends Controller
     private function authorizeAdminOrDosen(): void
     {
         $user = Auth::user();
-        if (! $user || ! in_array(strtolower($user->role ?? ''), ['admin', 'dosen'])) {
-            abort(403, 'Akses ditolak. Hanya Admin atau Dosen yang dapat mengisi/mengubah inventaris.');
+    if (! $user || ! in_array(strtolower($user->role ?? ''), ['admin', 'dosen', 'superadmin'])) {
+        abort(403, 'Akses ditolak. Hanya Admin, Dosen, atau Superadmin yang dapat mengisi/mengubah inventaris.');
+    
         }
     }
 }

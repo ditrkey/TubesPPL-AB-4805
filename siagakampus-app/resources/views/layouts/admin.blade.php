@@ -88,14 +88,14 @@
          class="fixed inset-0 bg-slate-900/60 z-40 lg:hidden" 
          style="display: none;"></div>
 
-    <!-- SIDEBAR PENGELOLA (Sage / Emerald Gelap khas SiagaKampus) -->
+         {{ 
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
            class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0a1f1b] border-r border-[#153a33] text-slate-300 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto">
         
         <!-- Logo & Header Brand -->
         <div class="h-20 px-6 flex items-center justify-between border-b border-[#153a33]">
             <a href="{{ route('admin.reports.index') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-950/40 font-bold text-lg">
+                <div class="w-10 h-10 rounded-xl from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-950/40 font-bold text-lg">
                     <i class="fa-solid fa-water"></i>
                 </div>
                 <div>
@@ -185,7 +185,6 @@
 
         </nav>
 
-        <!-- Sidebar Footer: Logged in User Card -->
         <div class="p-4 border-t border-[#153a33] bg-[#071714]">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3 min-w-0">
@@ -201,7 +200,6 @@
                     </div>
                 </div>
 
-                <!-- Form Logout -->
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" title="Keluar Sistem" class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition">
@@ -215,6 +213,7 @@
             </div>
         </div>
     </aside>
+    }}
 
     <!-- MAIN CONTENT WRAPPER -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
